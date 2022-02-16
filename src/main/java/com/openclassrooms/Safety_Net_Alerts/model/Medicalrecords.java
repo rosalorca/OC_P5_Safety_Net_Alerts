@@ -10,12 +10,12 @@ import java.util.Map;
 @Builder
 @Getter
 @Setter
-public class MedicalRecords {
+public class Medicalrecords {
     private String firstName;
     private String lastName;
-    private int birtDay;
+    private String birthdate;
 
-    private Map <String, Integer> medications;
+    private List<String> medications;
     private List<String> allergies;
 
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class WorkData {
 
     List<Persons> persons;
-    List<FireStations> fireStations;
-    List<MedicalRecords> medicalRecords;
+    List<Firestations> firestations;
+    List<Medicalrecords> medicalrecords;
 
 }

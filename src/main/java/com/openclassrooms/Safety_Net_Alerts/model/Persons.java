@@ -14,7 +14,7 @@ public class Persons {
     private String address;
     private String city;
     private int zip;
-    private long phoneNumber;
+    private String phone;
     private String email;
 
 }

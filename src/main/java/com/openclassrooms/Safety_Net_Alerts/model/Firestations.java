@@ -8,10 +8,10 @@ import lombok.*;
 @Setter
 //  @Data
 
-public class FireStations {
+public class  Firestations {
 
-    private int station;
-    private String adresse;
+    private String station;
+    private String address;
 
 
 

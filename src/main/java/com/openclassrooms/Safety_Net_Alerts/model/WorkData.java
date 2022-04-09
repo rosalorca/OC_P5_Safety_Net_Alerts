@@ -1,5 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.model;
 
+import com.openclassrooms.Safety_Net_Alerts.controller.PersonMedicalRecords;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

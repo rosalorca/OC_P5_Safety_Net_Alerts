@@ -14,10 +14,22 @@ public class PersonMedicalRecords {
 
     private String firstName;
     private String lastName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String address;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String phone;
-    private int age;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer age;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> medications;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> allergies;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
 

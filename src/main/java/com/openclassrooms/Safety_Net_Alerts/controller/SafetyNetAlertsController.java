@@ -1,25 +1,27 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
-import com.openclassrooms.Safety_Net_Alerts.core.DataStore;
+import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
+@AllArgsConstructor
 @RestController
 public class SafetyNetAlertsController {
 
     @Autowired
     private DataStore dataStore;
+
+
 
     @GetMapping(value = "/communityEmail")
     // Je peux accéder les mails des habitants
@@ -105,6 +107,7 @@ public class SafetyNetAlertsController {
             --age;
 
         }
+
         return age;
     }
 
@@ -138,15 +141,132 @@ public class SafetyNetAlertsController {
 
 
     }
-    //@GetMapping(value = "/fireStation")
-    //public
+
+    @GetMapping(value = "/fireStation")
+    public PersonsWithNumberOfAdultsAndChildren fireStation(final String stationNumber) {
+        // je cherche les adresses couvertes par la station dont le numéro est stationNumber
+        final List<String> addressesCoveredByStation = dataStore.getData().getFirestations() // on récupère toutes les stations
+                .stream()
+                .filter(station -> station.getStation().equals(stationNumber)) // parmi toutes les stations, on sélectionne toutes celles à cette adresse
+                .map(Firestations::getAddress) // ici on ne garde que le numéro des stations
+                .collect(Collectors.toList()); // et on convertit ça en liste
+
+        final PersonsWithNumberOfAdultsAndChildren result = new PersonsWithNumberOfAdultsAndChildren();
+        result.setPersons(new ArrayList<>());
+        dataStore.getData().getPersons()
+                .stream()
+                .filter(person -> addressesCoveredByStation.contains(person.getAddress()))
+                .forEach(person -> {
+                    final PersonMedicalRecords pmr = new PersonMedicalRecords();
+                    pmr.setFirstName(person.getFirstName());
+                    pmr.setLastName(person.getLastName());
+                    pmr.setAddress(person.getAddress());
+                    pmr.setPhone(person.getPhone());
+                    result.getPersons().add(pmr);
+                    final AtomicInteger age = new AtomicInteger(0);
+                    dataStore.getData().getMedicalrecords()
+                            .stream()
+                            .filter(medicalrecord -> medicalrecord.getFirstName()
+                                    .equals(pmr.getFirstName()) && medicalrecord.getLastName().equals(pmr.getLastName()))
+                            .findAny()
+                            .ifPresent(medicalrecord -> {
+                                try {
+                                    age.set(calculateAge(medicalrecord.getBirthdate()));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+
+                    if (age.get() > 18) {
+                        result.setNbAdults(result.getNbAdults() + 1);
+                    } else {
+                        result.setNbChildren(result.getNbChildren() + 1);
+                    }
+                });
 
 
-
-
-
+        return result;
+    }
 
    /* @GetMapping(value = "/childAlert")
-    @GetMapping(value = "/flood/stations")*/
+    public void childAlert(final String address) {
+
+        final List<PersonMedicalRecords> memberHomeListe = dataStore.getData().getPersons()
+                .stream()
+                .filter(inhabitant -> inhabitant.getAddress().equals(address))
+                .forEach(inhabitants-> {
+                    PersonMedicalRecords membres = new PersonMedicalRecords();
+                    membres.setFirstName(membres.getFirstName());
+                    membres.setLastName(membres.getLastName());
+                    membres.setAge(membres.getAge());
+                    //memberHomeListe.add(membres);
+
+                });
+                return ;
+        //memberHomeListe;
+
 }
+
+
+
+
+
+      /*  final List<PersonMedicalRecords> memberHomeListe = new ArrayList<>();
+        for (Persons inhabitant : dataStore.getData().getPersons()) {
+            if (inhabitant.getAddress().equals(address)) {
+                PersonMedicalRecords member = new PersonMedicalRecords();
+                member.setFirstName(inhabitant.getFirstName());
+                member.setLastName(inhabitant.getLastName());
+                memberHomeListe.add(member);
+            }
+        }*/
+
+
+
+        /*final ChildrenAndMembersHome result = new ChildrenAndMembersHome();
+        result.setMemberHomeListe(memberHomeListe);
+
+        final AtomicInteger age = new AtomicInteger();
+        final List<PersonMedicalRecords> childListe = new ArrayList<>();
+        for (Medicalrecords members : dataStore.getData().getMedicalrecords()) {
+            if (members.getFirstName().equals(members)) {
+                PersonMedicalRecords children = new PersonMedicalRecords();
+                children.setFirstName(members.getFirstName());
+                children.setLastName(members.getLastName());
+                /*children.setAge(age.set(calculateAge(medicalrecord.getBirthdate()));
+                if (19 > age) {
+                    childListe.add(children);
+                }
+
+            }
+*/
+
+            }
+
+/*
+        } return null;
+
+    }
+*/
+
+    /* @GetMapping(value = "/flood/station")
+        public PersonMedicalRecords floodAlert ( final String fireStation) {
+            final List<String> habitantList = dataStore.getData().getFirestations()
+                    .stream()
+                    .filter(station -> station.getStation().equals(fireStation))
+                    .map(Firestations::getAddress)
+                    .collect(Collectors.toList());
+            PersonMedicalRecords habitants = new PersonMedicalRecords();
+            habitants.setFirstName(habitants.getFirstName());
+            habitants.setLastName(habitants.getLastName());
+            habitants.setPhone(habitants.getPhone());
+            // habitants.setAge(calculateAge(getBirthdate()));
+
+            return null;
+        }
+    }
+*/
+
+
+
 

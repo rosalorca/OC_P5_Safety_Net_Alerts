@@ -1,4 +1,4 @@
-package com.openclassrooms.Safety_Net_Alerts.core;
+package com.openclassrooms.Safety_Net_Alerts.Dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.Safety_Net_Alerts.model.WorkData;

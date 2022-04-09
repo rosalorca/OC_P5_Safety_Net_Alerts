@@ -20,7 +20,7 @@ class SafetyNetAlertsApplicationTests {
     void testCalculateAge() throws ParseException {
         assertEquals(1, SafetyNetAlertsController.calculateAge("01/01/2021"));
         assertEquals(0, SafetyNetAlertsController.calculateAge("01/01/2022"));
-        assertEquals(33, SafetyNetAlertsController.calculateAge("24/02/1988"));
+        assertEquals(34, SafetyNetAlertsController.calculateAge("24/02/1988"));
         assertEquals(35, SafetyNetAlertsController.calculateAge("24/11/1986"));
     }
 

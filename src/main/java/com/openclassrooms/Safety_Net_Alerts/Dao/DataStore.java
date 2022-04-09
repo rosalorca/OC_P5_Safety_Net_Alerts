@@ -1,4 +1,4 @@
-package com.openclassrooms.Safety_Net_Alerts.core;
+package com.openclassrooms.Safety_Net_Alerts.Dao;
 
 import com.openclassrooms.Safety_Net_Alerts.model.WorkData;
 import lombok.Getter;

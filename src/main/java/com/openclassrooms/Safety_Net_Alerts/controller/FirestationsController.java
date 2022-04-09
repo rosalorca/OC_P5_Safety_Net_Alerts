@@ -1,6 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
-import com.openclassrooms.Safety_Net_Alerts.core.DataStore;
+import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

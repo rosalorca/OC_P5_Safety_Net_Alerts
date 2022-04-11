@@ -2,20 +2,22 @@ package com.openclassrooms.Safety_Net_Alerts.controller;
 
 import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@AllArgsConstructor
 @RestController
 public class PersonsController {
 
-    @Autowired
+   private final PersonsService personsService;
     private DataStore dataStore;
-
     @GetMapping(value = "/Persons")
     public List<Persons> listPersons() {
-        return dataStore.getData().getPersons();
+
+        return PersonsService.getData().getPersons();
     }
 
     @PostMapping(value = "/Persons")

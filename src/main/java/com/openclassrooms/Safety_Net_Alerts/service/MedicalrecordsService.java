@@ -14,6 +14,7 @@ public class MedicalrecordsService {
     private DataStore dataStore;
 
     public List<Medicalrecords> getMedicalrecords() {
+
         return dataStore.getData().getMedicalrecords();
     }
 

@@ -15,30 +15,30 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-public class PersonsController {
-    private final PersonsService personsService;
+class PersonsController {
 
-
+    private PersonsService personsService;
 
     @GetMapping(value = "/Persons")
-      public ResponseEntity<List<Persons>> getPersons() {
-        return new ResponseEntity<>(personsService.getPersons, HttpStatus.OK);
+    public ResponseEntity<List<Persons>> getPersons() {
+        return new ResponseEntity<>(personsService.getPersons(), HttpStatus.OK);
     }
+
 
     @PostMapping(value = "/Persons")
-    public void addPersons(@RequestBody Persons persons) {
-        dataStore.getData().getPersons().add(persons);
-    }
+    public ResponseEntity<Persons> addPersons() {
+        this.personsService = personsService;
+        return new ResponseEntity<Persons>(personsService.addPersons(),HttpStatus.CREATED );
+            }
 
     @PutMapping(value = "/Persons")
-    public void updatePersons(@RequestBody Persons persons) {
-        dataStore.getData().getPersons().stream().filter(person -> persons.getFirstName()
-                .equals(person.getFirstName()));
+    public ResponseEntity<Persons> updatePersons() {
+        return new ResponseEntity<>(personsService.updatePersons(), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(value = "/Persons")
-    public void deletePersons(@RequestBody Persons persons) {
-        dataStore.getData().getPersons().remove(persons);
+    public ResponseEntity<Persons> deletePersons() {
+        return new ResponseEntity<>(personsService.deletePersons(), HttpStatus.GONE);
     }
 
 

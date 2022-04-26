@@ -1,6 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
-import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
+import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 

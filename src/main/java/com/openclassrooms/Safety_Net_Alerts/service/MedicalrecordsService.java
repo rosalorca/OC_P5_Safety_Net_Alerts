@@ -1,6 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
-import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
+import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

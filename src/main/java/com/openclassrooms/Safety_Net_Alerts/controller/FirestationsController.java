@@ -1,17 +1,21 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
-import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
+import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
+import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
+import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class  FirestationsController {
-    @Autowired
-    private DataStore dataStore;
 
+    //private FirestationsService firestationsService;
+    private DataStore dataStore;
     @GetMapping(value = "/Firestations")
 
     public List<Firestations> listFirestation() {

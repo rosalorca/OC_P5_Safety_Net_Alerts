@@ -1,10 +1,8 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
-import com.openclassrooms.Safety_Net_Alerts.Dao.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
 import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

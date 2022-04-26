@@ -1,7 +1,6 @@
-package com.openclassrooms.Safety_Net_Alerts.Dao;
+package com.openclassrooms.Safety_Net_Alerts.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.Safety_Net_Alerts.model.WorkData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;

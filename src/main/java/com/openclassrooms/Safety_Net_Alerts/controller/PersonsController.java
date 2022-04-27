@@ -21,19 +21,23 @@ class PersonsController {
         return new ResponseEntity<>(personsService.getPersons(), HttpStatus.OK);
     }
 
-
+    // ajoute une personne dans la liste
     @PostMapping(value = "/Persons")
     public ResponseEntity<Persons> addPersons(@RequestBody Persons newPerson) {
         personsService.addPersons(newPerson);
         return new ResponseEntity<Persons>(newPerson, HttpStatus.CREATED );
     }
-
+    // modifier les informations des personnes
     @PutMapping(value = "/Persons/{firstName}/{lastName}")
-    public ResponseEntity<Persons> updatePersons(@PathVariable String firstName, @PathVariable String lastName, @RequestBody Persons updatePerson) {
-        personsService.updatePersons();
-        return new ResponseEntity<Persons>(updatePerson, HttpStatus.ACCEPTED);
+    public ResponseEntity<Persons> updatePersons(@RequestBody Persons updatePerson, @PathVariable String firstName, @PathVariable String lastName) {
+        Persons personUpdated = personsService.updatePersons(firstName, lastName, updatePerson);
+        if (personUpdated != null){
+            return new ResponseEntity<>(personUpdated,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(personUpdated,HttpStatus.NOT_MODIFIED);
+        }
     }
-
+    //supprimer les personnes
     @DeleteMapping(value = "/Persons/{firstName}/{lastName}")
     public ResponseEntity<Persons> deletePersons(@PathVariable String firstName,@PathVariable String lastName) {
         boolean isDeleted = personsService.deletePersons(firstName, lastName);

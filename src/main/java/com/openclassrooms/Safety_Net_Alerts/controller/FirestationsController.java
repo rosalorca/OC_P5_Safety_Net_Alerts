@@ -1,50 +1,59 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
+import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class  FirestationsController {
+public class FirestationsController {
 
-    //private FirestationsService firestationsService;
-    private DataStore dataStore;
+    private FirestationsService firestationsService;
+
+    //renvoie la liste de toutes les stations
     @GetMapping(value = "/Firestations")
-
-    public List<Firestations> listFirestation() {
-
-        return dataStore.getData().getFirestations();
+    public ResponseEntity<List<Firestations>> getFirestations() {
+        return new ResponseEntity<>(firestationsService.getFirestations(), HttpStatus.OK);
 
     }
 
+    // ajoute une adresse dans la liste
     @PostMapping(value = "/Firestations")
-    public void addfirestation(@RequestBody Firestations firestations) {
-        dataStore.getData().getFirestations().add(firestations);
+
+    public ResponseEntity<Firestations> addFirestation(@RequestBody Firestations newFirestation) {
+        firestationsService.addFirestation(newFirestation);
+        return new ResponseEntity<Firestations>(newFirestation, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/Firestations")
-    public void updateFirestations(@RequestBody Firestations firestation) {
-        List<Firestations> firestations = dataStore.getData().getFirestations();
-        for (Firestations firestations1 : firestations) {
-            if (firestations1.getAddress().equals(firestation.getAddress())) {
-                firestations1.setStation(firestation.getStation());
-            }
+    // modifier les adresses
+    @PutMapping(value = "/Firestations/{address}")
+    public ResponseEntity<Firestations> updateFirestation(@RequestBody Firestations updateFirestation, @PathVariable String address) {
+        Firestations firestationUpdated = firestationsService.updateFirestation(address, updateFirestation);
+        if (firestationUpdated != null) {
+            return new ResponseEntity<>(firestationUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(firestationUpdated, HttpStatus.NOT_MODIFIED);
         }
-
-
     }
-
-    @DeleteMapping(value = "/Firestations")
-    public void deleteFirestations(@RequestBody Firestations firestations) {
-
-
+    //supprimer une adresse ou une station
+    @DeleteMapping(value = "/Firestations/{address}/{station}")
+    public ResponseEntity<Firestations> deleteFirestation (@PathVariable String address, @PathVariable String station) {
+        System.out.println("coucou");
+        boolean isDeleted = firestationsService.deleteFirestation(address,station);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.GONE);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
     }
 
 }

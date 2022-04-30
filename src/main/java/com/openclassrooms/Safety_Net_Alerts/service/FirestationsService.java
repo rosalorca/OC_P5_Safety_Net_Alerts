@@ -1,7 +1,7 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
-import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,7 +28,13 @@ public class FirestationsService {
         log.info("la station a ètè bien ajouté!");
     }
 
-
+    
+    /**
+     * 
+     * @param address
+     * @param updateFirestation
+     * @return 
+     */
     public Firestations updateFirestation(String address, Firestations updateFirestation) {
         Firestations fireStationUpdated = null;
         List<Firestations> firestations = dataStore.getData().getFirestations();
@@ -54,6 +60,26 @@ public class FirestationsService {
             return false;
         }
     }
+    
+     public List<String> getStreets(final String firestation) {
+                return dataStore.getData().getFirestations()
+                .stream().filter(firestations -> firestations.getStation().equals(firestation))
+                .map(Firestations::getAddress).collect(Collectors.toList());
+    }
+     
+     /**
+      * getNum : je cherche le numéro de la station qui est à cette adresse
+      * @param address : une adresse 
+      * @return  le numéro de la sations associé a cette adresse
+      */
+     public String getNum(String address) {
+                 return dataStore.getData().getFirestations() // on récupère toutes les stations
+                .stream()
+                .filter(firestation -> firestation.getAddress().equals(address)) // parmi toutes les stations, on sélectionne toutes celles à cette adresse
+                .map(Firestations::getStation) // ici on ne garde que le numéro des stations
+                .findAny() // on prend la première station qu'on trouve
+                .get();
+     }
 
 
 }

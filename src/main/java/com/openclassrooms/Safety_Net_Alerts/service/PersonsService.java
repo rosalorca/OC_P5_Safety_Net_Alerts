@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -81,5 +82,10 @@ public class PersonsService {
             return false;
         }
     }
-
+    
+    public List<String> getAdresses(List<String>  streets) {
+        return dataStore.getData().getPersons().stream()
+                .filter(persons -> streets.contains(persons.getAddress()))
+                .map(Persons::getPhone).collect(Collectors.toList());
+    }
 }

@@ -10,9 +10,9 @@
         <relativePath/>
     </parent>
     <groupId>com.openclassrooms</groupId>
-    <artifactId>Safety_Net_Alerts</artifactId>
+    <artifactId>Safety_Net_Alerts_OZLEM</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Safety_Net_Alerts</name>
+    <name>Safety_Net_Alerts_OZLEM</name>
     <description>Safety_Net_Alerts project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>

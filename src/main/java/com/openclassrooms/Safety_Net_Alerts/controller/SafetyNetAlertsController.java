@@ -3,6 +3,8 @@ package com.openclassrooms.Safety_Net_Alerts.controller;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
+import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,12 @@ public class SafetyNetAlertsController {
 
     @Autowired
     private DataStore dataStore;
-
+    
+    @Autowired
+    private PersonsService person_service;
+    
+    @Autowired 
+    private FirestationsService firestations;
 
 
     @GetMapping(value = "/communityEmail")
@@ -36,13 +43,19 @@ public class SafetyNetAlertsController {
     @GetMapping(value = "/phoneAlert")
     public List<String> phoneAlert(final String firestation) {
         // je cherche les adresses des stations qui ont ce numéro
+        /*
         List<String> streets = dataStore.getData().getFirestations()
                 .stream().filter(firestations -> firestations.getStation().equals(firestation))
                 .map(Firestations::getAddress).collect(Collectors.toList());
+        */
+        //firestations.getStreets(firestation);
         // je cherche les personnes qui habitent à ces adresses
+        /*
         return dataStore.getData().getPersons().stream()
                 .filter(persons -> streets.contains(persons.getAddress()))
                 .map(Persons::getPhone).collect(Collectors.toList());
+        */
+        return person_service.getAdresses(firestations.getStreets(firestation));
     }
 
     @GetMapping(value = "/fire")

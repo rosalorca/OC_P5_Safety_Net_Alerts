@@ -1,7 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
-
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +21,23 @@ public class FirestationsService {
         return dataStore.getData().getFirestations();
     }
 
-
     public void addFirestation(Firestations firestations) {
         dataStore.getData().getFirestations();
         log.info("la station a ètè bien ajouté!");
     }
 
-    
     /**
-     * 
-     * @param address
-     * @param updateFirestation
-     * @return 
+     *
+     * @param station
+     * @return
      */
+    public List<String> getAddressesCoveredByStation(final String station) {
+        return dataStore.getData().getFirestations().stream()
+                .filter(firestations->firestations.getStation().equals(station))
+                .map(Firestations::getAddress)
+                .collect(Collectors.toList());
+    }
+
     public Firestations updateFirestation(String address, Firestations updateFirestation) {
         Firestations fireStationUpdated = null;
         List<Firestations> firestations = dataStore.getData().getFirestations();
@@ -80,6 +83,7 @@ public class FirestationsService {
                 .findAny() // on prend la première station qu'on trouve
                 .get();
      }
+
 
 
 }

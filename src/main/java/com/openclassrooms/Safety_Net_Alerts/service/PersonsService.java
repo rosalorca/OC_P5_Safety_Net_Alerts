@@ -13,15 +13,23 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class PersonsService {
 
+public class PersonsService {
 
     @Autowired
     private DataStore dataStore;
 
     public List<Persons> getPersons() {
         return dataStore.getData().getPersons();
+    }
+    public List<Persons> getPersonsInCity (String city){
+        return dataStore.getData().getPersons().stream()
+                .filter(p->p.getCity().equals(city)).collect(Collectors.toList());
+    }
 
+    public List<Persons> getPersonsAtAddresses(final List<String> addresses) {
+        return dataStore.getData().getPersons().stream()
+                .filter(p -> addresses.contains(p.getAddress())).collect(Collectors.toList());
     }
 
     public void addPersons(Persons persons) {
@@ -38,10 +46,10 @@ public class PersonsService {
         if (optionalPerson.isPresent()) {
             System.out.println("j'ai trouvé la personne a modifier !");
             Persons person = optionalPerson.get();
-            if(updatePerson.getFirstName() != null){
+            if (updatePerson.getFirstName() != null) {
                 person.setFirstName(updatePerson.getFirstName());
             }
-            if(updatePerson.getLastName() != null){
+            if (updatePerson.getLastName() != null) {
                 person.setLastName(updatePerson.getLastName());
             }
             if (updatePerson.getAddress() != null) {

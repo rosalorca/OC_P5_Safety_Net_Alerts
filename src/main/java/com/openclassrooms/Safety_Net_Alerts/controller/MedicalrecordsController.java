@@ -1,6 +1,7 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
+import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,38 +34,24 @@ public class MedicalrecordsController {
     }
 
     // cette methode cherche une persoone qui existe dans la liste et modifier la personne
-    @PutMapping(value = "/Medicalrecords")
-    public ResponseEntity<List<Medicalrecords>> updateMedicalrecords(@RequestBody Medicalrecords medicalrecords) {
-        boolean isUpdated = medicalrecordsService.updateMedicalrecords(medicalrecords);
-        if (isUpdated) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    @PutMapping(value = "/Medicalrecords/{firstName}/{lastName}")
+    public ResponseEntity<Medicalrecords> updateMedicalrecords
+    (@RequestBody Medicalrecords updateMedicalrecord , @PathVariable String firstName, @PathVariable String lastName) {
+     Medicalrecords medicalrecordUpdated = medicalrecordsService.updateMedicalrecords(firstName, lastName, updateMedicalrecord);
+        if (medicalrecordUpdated != null) {
+            return new ResponseEntity<>(medicalrecordUpdated,HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(medicalrecordUpdated,HttpStatus.NOT_MODIFIED);
+        }
+    }
+    //supprimer les personnes
+    @DeleteMapping(value = "/Medicalrecords/{firstName}/{lastName}")
+    public ResponseEntity<Persons> deleteMedicalrecords (@PathVariable String firstName,@PathVariable String lastName) {
+        boolean isDeleted = medicalrecordsService.deleteMedicalrecords(firstName, lastName);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.GONE);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
     }
 }
-    /*@DeleteMapping(value = "/Medicalrecords")
-    public ResponseEntity<List<Medicalrecords>> deleteMedicalrecords(@RequestBody Medicalrecords medicalrecords) {
-
-        return null;
-    }
-}
-
-
-    /* List<Medicalrecords> medicalrecordsList = dataStore.getData().getMedicalrecords();
-     for(Medicalrecords medicalrecord : medicalrecordsList){
-          if(medicalrecord.getFirstName().equals(medicalrecords.getFirstName())){
-
-         }
-     }
-     }
-    private DataStore dataStore;
-
-    @DeleteMapping(value = "/Medicalrecords")
-    public void deleteMedicalrecords(@RequestBody Medicalrecords medicalrecords) {
-        List<Medicalrecords> medicalrecordsList = dataStore.getData().getMedicalrecords();
-        for (Medicalrecords medicalrecords2 : medicalrecordsList) {
-
-        }
-    }
-}*/

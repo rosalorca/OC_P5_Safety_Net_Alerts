@@ -6,6 +6,9 @@ import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 
+import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
+import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
+import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,40 +25,27 @@ public class SafetyNetAlertsController {
 
     @Autowired
     private DataStore dataStore;
-    
     @Autowired
-    private PersonsService person_service;
-    
-    @Autowired 
-    private FirestationsService firestations;
-
+    private FirestationsService firestationsService;
+    @Autowired
+    private PersonsService personsService;
+    @Autowired
+    private MedicalrecordsService medicalrecordsService;
 
     @GetMapping(value = "/communityEmail")
-    // Je peux accéder les mails des habitants
     public List<String> communityEmail(final String city) {
-        return dataStore.getData().getPersons().stream()
-                .filter(person -> person.getCity().equals(city))
+        return personsService.getPersonsInCity(city).stream()
                 .map(Persons::getEmail)
                 .collect(Collectors.toList());
 
     }
 
     @GetMapping(value = "/phoneAlert")
-    public List<String> phoneAlert(final String firestation) {
-        // je cherche les adresses des stations qui ont ce numéro
-        /*
-        List<String> streets = dataStore.getData().getFirestations()
-                .stream().filter(firestations -> firestations.getStation().equals(firestation))
-                .map(Firestations::getAddress).collect(Collectors.toList());
-        */
-        //firestations.getStreets(firestation);
-        // je cherche les personnes qui habitent à ces adresses
-        /*
-        return dataStore.getData().getPersons().stream()
-                .filter(persons -> streets.contains(persons.getAddress()))
-                .map(Persons::getPhone).collect(Collectors.toList());
-        */
-        return person_service.getAdresses(firestations.getStreets(firestation));
+    public List<String> phoneAlert (final String firestation) {
+        final List<String> addresses = firestationsService.getAddressesCoveredByStation(firestation);
+        return personsService.getPersonsAtAddresses(addresses).stream()
+                .map(Persons::getPhone)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/fire")
@@ -126,7 +116,6 @@ public class SafetyNetAlertsController {
 
     @GetMapping(value = "/personInfo")
     public PersonMedicalRecords personInfo(final String firstName, String lastName) {
-
         final PersonMedicalRecords person = new PersonMedicalRecords();
         person.setFirstName(firstName);
         dataStore.getData().getPersons().stream()
@@ -151,18 +140,11 @@ public class SafetyNetAlertsController {
                 });
         person.setLastName(lastName);
         return person;
-
-
     }
 
     @GetMapping(value = "/fireStation")
     public PersonsWithNumberOfAdultsAndChildren fireStation(final String stationNumber) {
-        // je cherche les adresses couvertes par la station dont le numéro est stationNumber
-        final List<String> addressesCoveredByStation = dataStore.getData().getFirestations() // on récupère toutes les stations
-                .stream()
-                .filter(station -> station.getStation().equals(stationNumber)) // parmi toutes les stations, on sélectionne toutes celles à cette adresse
-                .map(Firestations::getAddress) // ici on ne garde que le numéro des stations
-                .collect(Collectors.toList()); // et on convertit ça en liste
+        final List<String> addressesCoveredByStation = firestationsService.getAddressesCoveredByStation(stationNumber);
 
         final PersonsWithNumberOfAdultsAndChildren result = new PersonsWithNumberOfAdultsAndChildren();
         result.setPersons(new ArrayList<>());

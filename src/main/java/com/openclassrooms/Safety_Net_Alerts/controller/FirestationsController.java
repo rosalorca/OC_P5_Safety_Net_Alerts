@@ -47,7 +47,6 @@ public class FirestationsController {
     //supprimer une adresse ou une station
     @DeleteMapping(value = "/Firestations/{address}/{station}")
     public ResponseEntity<Firestations> deleteFirestation (@PathVariable String address, @PathVariable String station) {
-        System.out.println("coucou");
         boolean isDeleted = firestationsService.deleteFirestation(address,station);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.GONE);
@@ -55,5 +54,6 @@ public class FirestationsController {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
     }
+
 
 }

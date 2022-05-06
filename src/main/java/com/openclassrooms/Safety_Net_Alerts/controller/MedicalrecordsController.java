@@ -2,8 +2,11 @@ package com.openclassrooms.Safety_Net_Alerts.controller;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
 import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
+import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +16,22 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping
+@Slf4j
 public class MedicalrecordsController {
-    private final MedicalrecordsService medicalrecordsService;
+    private MedicalrecordsService medicalrecordsService;
+    private PersonsService personsService;
+    private FirestationsService firestationsService;
+
 
 
     @GetMapping(value = "/Medicalrecords")
     public ResponseEntity<List<Medicalrecords>> getMedicalrecords() {
         return new ResponseEntity<>(medicalrecordsService.getMedicalrecords(), HttpStatus.OK);
     }
+
+
+
+
 
     //cette methode ajoute la personne mais si le nom et prenom sont déjà existe il compare
     @PostMapping(value = "/Medicalrecords")

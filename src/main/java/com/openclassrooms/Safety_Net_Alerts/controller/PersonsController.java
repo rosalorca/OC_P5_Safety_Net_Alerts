@@ -1,20 +1,36 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
+import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 class PersonsController {
 
     private PersonsService personsService;
+    private FirestationsService firestationsService;
+    private MedicalrecordsService medicalrecordsService;
 
+
+
+    // récuperer les addresses mails par rapport à la ville
+    @GetMapping(value = "/communityEmail")
+    public List<String> communityEmail(final String city) {
+        return personsService.getPersonsInCity(city).stream()
+                .map(Persons::getEmail)
+                .collect(Collectors.toList());
+    }
     // renvoie la liste de toutes les personnes
     @GetMapping(value = "/Persons")
     public ResponseEntity<List<Persons>> getPersons() {

@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 public class  Firestations {
 
-    private String station;
+    private Integer station;
     private String address;
 
 

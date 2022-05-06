@@ -4,20 +4,26 @@ import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
+import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class FirestationsController {
 
     private FirestationsService firestationsService;
+    private PersonsService personsService;
+    private MedicalrecordsService medicalrecordsService;
 
     //renvoie la liste de toutes les stations
     @GetMapping(value = "/Firestations")
@@ -25,6 +31,31 @@ public class FirestationsController {
         return new ResponseEntity<>(firestationsService.getFirestations(), HttpStatus.OK);
 
     }
+
+    @GetMapping(value = "/phoneAlert")
+    public List<String> phoneAlert(final Integer firestation) {
+        final List<String> addresses = firestationsService.getAddressesCoveredByStation(firestation);
+
+        if (!addresses.isEmpty()) {
+            return personsService.getPersonsAtAddresses(addresses).stream()
+                    .map(Persons::getPhone)
+                    .collect(Collectors.toList());
+        } else {
+            log.error("je n'ai pas trouvé la station!");
+            return null;
+        }
+    }
+
+    @GetMapping(value = "/fire")
+    public FirestationAndPersonsAtAddress fire(final String address) {
+        final Integer station = firestationsService.getStation(address);
+
+        return firestationsService.getPersonListe(station).stream()
+                .map(Persons::getFirstName)
+                .collect(Collectors.toList());
+    }
+
+
 
     // ajoute une adresse dans la liste
     @PostMapping(value = "/Firestations")
@@ -46,7 +77,7 @@ public class FirestationsController {
     }
     //supprimer une adresse ou une station
     @DeleteMapping(value = "/Firestations/{address}/{station}")
-    public ResponseEntity<Firestations> deleteFirestation (@PathVariable String address, @PathVariable String station) {
+    public ResponseEntity<Firestations> deleteFirestation (@PathVariable String address, @PathVariable Integer station) {
         boolean isDeleted = firestationsService.deleteFirestation(address,station);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.GONE);

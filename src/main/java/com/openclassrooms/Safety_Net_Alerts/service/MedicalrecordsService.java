@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -83,5 +87,31 @@ public class MedicalrecordsService {
             log.error("je n'ai pas trouvé la personne a supprimer !");
             return false;
         }
+    }
+    public static int calculateAge(String strBirthdate) throws ParseException {
+
+        Date dateBirth = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); // pour lire la date string
+        dateBirth = simpleDateFormat.parse(strBirthdate);// pour convertir de string à date
+        Calendar calendarBirth = Calendar.getInstance(); // pour lire la date actuelle
+        calendarBirth.setTime(dateBirth); // pour mettre la date à la valeur de la date de naissance
+        int birthDay = calendarBirth.get(Calendar.DAY_OF_MONTH);
+        int birthMonth = calendarBirth.get(Calendar.MONTH);
+        int birthYear = calendarBirth.get(Calendar.YEAR);
+        Calendar calendarActual = Calendar.getInstance(); // pour lire la date actuelle
+
+        int actualDay = calendarActual.get(Calendar.DAY_OF_MONTH);
+        int actualMonth = calendarActual.get(Calendar.MONTH);
+        int actualYear = calendarActual.get(Calendar.YEAR);
+        int age = actualYear - birthYear;
+        if (age < 0) {
+            throw new IllegalArgumentException("Birthdate is in the future");
+        }
+        if ((birthMonth > actualMonth) || (birthMonth == actualMonth) && (birthDay > actualDay)) {
+            --age;
+
+        }
+
+        return age;
     }
 }

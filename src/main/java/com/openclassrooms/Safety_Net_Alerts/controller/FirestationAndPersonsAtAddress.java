@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class FirestationAndPersonsAtAddress {
 
-    String station;
+    Integer station;
     List<PersonMedicalRecords> persons;
 
 }

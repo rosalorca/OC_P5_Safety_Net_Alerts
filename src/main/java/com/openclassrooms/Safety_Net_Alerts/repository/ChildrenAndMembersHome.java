@@ -1,4 +1,4 @@
-package com.openclassrooms.Safety_Net_Alerts.controller;
+package com.openclassrooms.Safety_Net_Alerts.repository;
 
 import lombok.*;
 

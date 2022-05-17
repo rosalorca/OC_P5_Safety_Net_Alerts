@@ -19,18 +19,7 @@ import java.util.stream.Collectors;
 class PersonsController {
 
     private PersonsService personsService;
-    private FirestationsService firestationsService;
-    private MedicalrecordsService medicalrecordsService;
 
-
-
-    // récuperer les addresses mails par rapport à la ville
-    @GetMapping(value = "/communityEmail")
-    public List<String> communityEmail(final String city) {
-        return personsService.getPersonsInCity(city).stream()
-                .map(Persons::getEmail)
-                .collect(Collectors.toList());
-    }
     // renvoie la liste de toutes les personnes
     @GetMapping(value = "/Persons")
     public ResponseEntity<List<Persons>> getPersons() {
@@ -41,21 +30,23 @@ class PersonsController {
     @PostMapping(value = "/Persons")
     public ResponseEntity<Persons> addPersons(@RequestBody Persons newPerson) {
         personsService.addPersons(newPerson);
-        return new ResponseEntity<Persons>(newPerson, HttpStatus.CREATED );
+        return new ResponseEntity<Persons>(newPerson, HttpStatus.CREATED);
     }
+
     // modifier les informations des personnes
     @PutMapping(value = "/Persons/{firstName}/{lastName}")
     public ResponseEntity<Persons> updatePersons(@RequestBody Persons updatePerson, @PathVariable String firstName, @PathVariable String lastName) {
         Persons personUpdated = personsService.updatePersons(firstName, lastName, updatePerson);
-        if (personUpdated != null){
-            return new ResponseEntity<>(personUpdated,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(personUpdated,HttpStatus.NOT_MODIFIED);
+        if (personUpdated != null) {
+            return new ResponseEntity<>(personUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(personUpdated, HttpStatus.NOT_MODIFIED);
         }
     }
+
     //supprimer les personnes
     @DeleteMapping(value = "/Persons/{firstName}/{lastName}")
-    public ResponseEntity<Persons> deletePersons(@PathVariable String firstName,@PathVariable String lastName) {
+    public ResponseEntity<Persons> deletePersons(@PathVariable String firstName, @PathVariable String lastName) {
         boolean isDeleted = personsService.deletePersons(firstName, lastName);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.GONE);

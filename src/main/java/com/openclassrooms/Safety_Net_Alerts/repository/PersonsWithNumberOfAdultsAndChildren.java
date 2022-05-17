@@ -1,4 +1,4 @@
-package com.openclassrooms.Safety_Net_Alerts.controller;
+package com.openclassrooms.Safety_Net_Alerts.repository;
 
 import lombok.*;
 
@@ -9,9 +9,11 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class FirestationAndPersonsAtAddress {
-
-    Integer station;
+public class PersonsWithNumberOfAdultsAndChildren {
     List<PersonMedicalRecords> persons;
+
+    int nbAdults;
+    int nbChildren;
+
 
 }

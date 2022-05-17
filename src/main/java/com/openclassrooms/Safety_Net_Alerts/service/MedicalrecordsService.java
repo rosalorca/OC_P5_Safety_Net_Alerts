@@ -27,8 +27,10 @@ public class MedicalrecordsService {
         return dataStore.getData().getMedicalrecords();
     }
 
-    public List<Medicalrecords> getMedicalrecords(final String firstName, final String lastName) {
-        return dataStore.getData().getMedicalrecords().stream().filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName)).collect(Collectors.toList());
+    public Medicalrecords getMedicalrecords(final String firstName, final String lastName) {
+        return dataStore.getData().getMedicalrecords().stream()
+                .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
+                .findFirst().orElse(null);
     }
 
     public boolean createMedicalrecords(Medicalrecords medicalrecord) {
@@ -114,4 +116,5 @@ public class MedicalrecordsService {
 
         return age;
     }
+
 }

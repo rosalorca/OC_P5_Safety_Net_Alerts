@@ -2,11 +2,13 @@ package com.openclassrooms.Safety_Net_Alerts.service;
 
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.repository.PersonMedicalRecords;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,17 +22,58 @@ public class PersonsService {
     private DataStore dataStore;
 
     public List<Persons> getPersons() {
+
         return dataStore.getData().getPersons();
     }
-    public List<Persons> getPersonsInCity (String city){
+
+    public List<Persons> getPersonsInCity(String city) {
         return dataStore.getData().getPersons().stream()
-                .filter(p->p.getCity().equals(city)).collect(Collectors.toList());
+                .filter(p -> p.getCity().equals(city)).collect(Collectors.toList());
     }
 
     public List<Persons> getPersonsAtAddresses(final List<String> addresses) {
         return dataStore.getData().getPersons().stream()
-                .filter(p -> addresses.contains(p.getAddress())).collect(Collectors.toList());
+                .filter(p -> addresses.contains(p.getAddress()))
+                .collect(Collectors.toList());
     }
+
+    // renvoie la (seule) personne qui a ce nom et ce prénom
+    public Persons getPersonInfo(final String firstName, final String lastName) {
+        return dataStore.getData().getPersons().stream()
+                .filter(persons -> persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName))
+                .findFirst().orElse(null);
+    }
+
+    // renvoie toutes les personnes qui ont le même nom
+    public List<Persons> getPersonInfo(final String lastName) {
+        return dataStore.getData().getPersons().stream()
+                .filter(persons -> persons.getLastName().equals(lastName))
+                .collect(Collectors.toList());
+    }
+        /*person.setFirstName(firstName);
+        dataStore.getData().getPersons().stream()
+                .filter(persons -> persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName))
+                .forEach(persons -> {
+                    person.setFirstName(persons.getFirstName());
+                    person.setLastName(persons.getLastName());
+                    person.setPhone(persons.getPhone());
+                    dataStore.getData().getMedicalrecords().stream()
+                            .filter(medicalrecord -> medicalrecord.getFirstName()
+                                    .equals(persons.getFirstName()) && medicalrecord.getLastName().equals(persons.getLastName()))
+                            .findAny()
+                            .ifPresent(medicalrecord -> {
+                                person.setMedications(medicalrecord.getMedications());
+                                person.setAllergies(medicalrecord.getAllergies());
+                                try {
+                                    person.setAge(calculateAge(medicalrecord.getBirthdate()));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                });
+        person.setLastName(lastName);*/
+
+
 
     public void addPersons(Persons persons) {
 
@@ -90,10 +133,6 @@ public class PersonsService {
             return false;
         }
     }
-    
-    public List<String> getAdresses(List<String>  streets) {
-        return dataStore.getData().getPersons().stream()
-                .filter(persons -> streets.contains(persons.getAddress()))
-                .map(Persons::getPhone).collect(Collectors.toList());
-    }
+
+
 }

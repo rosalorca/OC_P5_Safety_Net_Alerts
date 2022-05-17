@@ -19,19 +19,11 @@ import java.util.List;
 @Slf4j
 public class MedicalrecordsController {
     private MedicalrecordsService medicalrecordsService;
-    private PersonsService personsService;
-    private FirestationsService firestationsService;
-
-
 
     @GetMapping(value = "/Medicalrecords")
     public ResponseEntity<List<Medicalrecords>> getMedicalrecords() {
         return new ResponseEntity<>(medicalrecordsService.getMedicalrecords(), HttpStatus.OK);
     }
-
-
-
-
 
     //cette methode ajoute la personne mais si le nom et prenom sont déjà existe il compare
     @PostMapping(value = "/Medicalrecords")
@@ -47,17 +39,18 @@ public class MedicalrecordsController {
     // cette methode cherche une persoone qui existe dans la liste et modifier la personne
     @PutMapping(value = "/Medicalrecords/{firstName}/{lastName}")
     public ResponseEntity<Medicalrecords> updateMedicalrecords
-    (@RequestBody Medicalrecords updateMedicalrecord , @PathVariable String firstName, @PathVariable String lastName) {
-     Medicalrecords medicalrecordUpdated = medicalrecordsService.updateMedicalrecords(firstName, lastName, updateMedicalrecord);
+    (@RequestBody Medicalrecords updateMedicalrecord, @PathVariable String firstName, @PathVariable String lastName) {
+        Medicalrecords medicalrecordUpdated = medicalrecordsService.updateMedicalrecords(firstName, lastName, updateMedicalrecord);
         if (medicalrecordUpdated != null) {
-            return new ResponseEntity<>(medicalrecordUpdated,HttpStatus.OK);
+            return new ResponseEntity<>(medicalrecordUpdated, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(medicalrecordUpdated,HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(medicalrecordUpdated, HttpStatus.NOT_MODIFIED);
         }
     }
+
     //supprimer les personnes
     @DeleteMapping(value = "/Medicalrecords/{firstName}/{lastName}")
-    public ResponseEntity<Persons> deleteMedicalrecords (@PathVariable String firstName,@PathVariable String lastName) {
+    public ResponseEntity<Persons> deleteMedicalrecords(@PathVariable String firstName, @PathVariable String lastName) {
         boolean isDeleted = medicalrecordsService.deleteMedicalrecords(firstName, lastName);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.GONE);

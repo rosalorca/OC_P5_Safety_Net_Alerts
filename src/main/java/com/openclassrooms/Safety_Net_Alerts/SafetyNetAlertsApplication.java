@@ -1,5 +1,7 @@
 package com.openclassrooms.Safety_Net_Alerts;
 
+
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SafetyNetAlertsApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(SafetyNetAlertsApplication.class, args);
     }
 

@@ -1,22 +1,14 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
-import com.openclassrooms.Safety_Net_Alerts.controller.FirestationAndPersonsAtAddress;
-import com.openclassrooms.Safety_Net_Alerts.controller.PersonMedicalRecords;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService.calculateAge;
 
 @Service
 @Slf4j
@@ -26,36 +18,9 @@ public class FirestationsService {
     private DataStore dataStore;
 
     public List<Firestations> getFirestations() {
+
         return dataStore.getData().getFirestations();
     }
-
-    public Arrays getPersonListe(final Integer station) {
-
-
-        final PersonMedicalRecords person = new PersonMedicalRecords();
-        persPersonMedicalRecords person = new PersonMedicalRecords();
-        person.setFirstName(persons.getFirstName());
-        person.setLastName(persons.getLastName());
-        person.setPhone(persons.getPhone());
-    on.setFirstName(persons.getFirstName());
-        person.setLastName(persons.getLastName());
-        person.setPhone(persons.getPhone());
-        dataStore.getData().getMedicalrecords().stream()
-                .filter(medicalrecord -> medicalrecord.getFirstName()
-                        .equals(persons.getFirstName()) && medicalrecord.getLastName().equals(persons.getLastName()))
-                .findAny()
-                .ifPresent(medicalrecord -> {
-                    person.setMedications(medicalrecord.getMedications());
-                    person.setAllergies(medicalrecord.getAllergies());
-                    try {
-                        person.setAge(calculateAge(medicalrecord.getBirthdate()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                });
-        return null;
-    }
-
 
     public void addFirestation(Firestations firestations) {
         dataStore.getData().getFirestations().add(firestations);

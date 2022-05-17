@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 public class FirestationsController {
 
     private FirestationsService firestationsService;
-    private PersonsService personsService;
-    private MedicalrecordsService medicalrecordsService;
 
     //renvoie la liste de toutes les stations
     @GetMapping(value = "/Firestations")
@@ -31,31 +29,6 @@ public class FirestationsController {
         return new ResponseEntity<>(firestationsService.getFirestations(), HttpStatus.OK);
 
     }
-
-    @GetMapping(value = "/phoneAlert")
-    public List<String> phoneAlert(final Integer firestation) {
-        final List<String> addresses = firestationsService.getAddressesCoveredByStation(firestation);
-
-        if (!addresses.isEmpty()) {
-            return personsService.getPersonsAtAddresses(addresses).stream()
-                    .map(Persons::getPhone)
-                    .collect(Collectors.toList());
-        } else {
-            log.error("je n'ai pas trouvé la station!");
-            return null;
-        }
-    }
-
-    @GetMapping(value = "/fire")
-    public FirestationAndPersonsAtAddress fire(final String address) {
-        final Integer station = firestationsService.getStation(address);
-
-        return firestationsService.getPersonListe(station).stream()
-                .map(Persons::getFirstName)
-                .collect(Collectors.toList());
-    }
-
-
 
     // ajoute une adresse dans la liste
     @PostMapping(value = "/Firestations")
@@ -75,10 +48,11 @@ public class FirestationsController {
             return new ResponseEntity<>(firestationUpdated, HttpStatus.NOT_MODIFIED);
         }
     }
+
     //supprimer une adresse ou une station
     @DeleteMapping(value = "/Firestations/{address}/{station}")
-    public ResponseEntity<Firestations> deleteFirestation (@PathVariable String address, @PathVariable Integer station) {
-        boolean isDeleted = firestationsService.deleteFirestation(address,station);
+    public ResponseEntity<Firestations> deleteFirestation(@PathVariable String address, @PathVariable Integer station) {
+        boolean isDeleted = firestationsService.deleteFirestation(address, station);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.GONE);
         } else {

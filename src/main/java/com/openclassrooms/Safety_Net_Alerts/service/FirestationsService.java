@@ -21,27 +21,31 @@ public class FirestationsService {
 
         return dataStore.getData().getFirestations();
     }
-
-    public void addFirestation(Firestations firestations) {
-        dataStore.getData().getFirestations().add(firestations);
-        log.info("la station a ètè bien ajouté!");
-    }
-
-    /**
-     * @param station
-     * @return
-     */
+    // for le request fire station that including firs name, last name, addresses,telephone number
+    // and calculate how many child or adult live hear
     public List<String> getAddressesCoveredByStation(final Integer station) {
         return dataStore.getData().getFirestations().stream()
                 .filter(firestations -> firestations.getStation().equals(station))
                 .map(Firestations::getAddress)
                 .collect(Collectors.toList());
     }
-
-    public Integer getStation(final String address) {
+    // for request fire that including firs name, last name, telephone number
+    public Integer getStationCoveredByAddress(final String address) {
         return dataStore.getData().getFirestations()
                 .stream().filter(firestations -> firestations.getAddress().equals(address))
                 .map(Firestations::getStation).findAny().get();
+    }
+    public List<Firestations> getStation (final List<Integer> station){
+        return dataStore.getData().getFirestations().stream()
+              .filter(f->f.getStation().equals(station))
+              .collect(Collectors.toList());
+
+    }
+
+    // the request for add, update and delete fire stations
+    public void addFirestation(Firestations firestations) {
+        dataStore.getData().getFirestations().add(firestations);
+        log.info("la station a ètè bien ajouté!");
     }
 
     public Firestations updateFirestation(String address, Firestations updateFirestation) {
@@ -69,6 +73,7 @@ public class FirestationsService {
             return false;
         }
     }
+
 
 
 }

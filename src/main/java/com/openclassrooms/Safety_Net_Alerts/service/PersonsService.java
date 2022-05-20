@@ -50,31 +50,9 @@ public class PersonsService {
                 .filter(persons -> persons.getLastName().equals(lastName))
                 .collect(Collectors.toList());
     }
-        /*person.setFirstName(firstName);
-        dataStore.getData().getPersons().stream()
-                .filter(persons -> persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName))
-                .forEach(persons -> {
-                    person.setFirstName(persons.getFirstName());
-                    person.setLastName(persons.getLastName());
-                    person.setPhone(persons.getPhone());
-                    dataStore.getData().getMedicalrecords().stream()
-                            .filter(medicalrecord -> medicalrecord.getFirstName()
-                                    .equals(persons.getFirstName()) && medicalrecord.getLastName().equals(persons.getLastName()))
-                            .findAny()
-                            .ifPresent(medicalrecord -> {
-                                person.setMedications(medicalrecord.getMedications());
-                                person.setAllergies(medicalrecord.getAllergies());
-                                try {
-                                    person.setAge(calculateAge(medicalrecord.getBirthdate()));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                });
-        person.setLastName(lastName);*/
 
 
-
+    // the request for add, update and delete fire stations
     public void addPersons(Persons persons) {
 
         dataStore.getData().getPersons().add(persons);

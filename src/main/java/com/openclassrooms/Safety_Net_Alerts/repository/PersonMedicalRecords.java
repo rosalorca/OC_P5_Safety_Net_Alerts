@@ -33,4 +33,6 @@ public class PersonMedicalRecords {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer station;
 }

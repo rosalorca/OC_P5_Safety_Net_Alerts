@@ -9,7 +9,8 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class ChildrenAndMembersHome {
+public class ChildrenListeAndResident {
     List<PersonMedicalRecords> childListe;
-    List<PersonMedicalRecords> memberHomeListe;
+    List<PersonMedicalRecords> residentListe;
+
 }

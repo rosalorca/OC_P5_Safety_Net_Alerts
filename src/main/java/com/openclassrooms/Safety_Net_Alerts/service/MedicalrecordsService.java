@@ -1,6 +1,5 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
-import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
 import lombok.extern.slf4j.Slf4j;
@@ -116,5 +115,18 @@ public class MedicalrecordsService {
 
         return age;
     }
-
+    public List<Medicalrecords> getChild(String address) {
+        return dataStore.getData().getMedicalrecords().stream()
+            .filter(person -> {
+                boolean isChild = false;
+                try {
+                    int age = calculateAge(person.getBirthdate());
+                    isChild = age < 18;
+                } catch (final ParseException e) {
+                    log.error("", e);
+                }
+                return false;
+            })
+            .collect(Collectors.toList());
+    }
 }

@@ -1,8 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.controller;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
-import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
-import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@RequestMapping("/api")
 @RestController
 @Slf4j
 class PersonsController {

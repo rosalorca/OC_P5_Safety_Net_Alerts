@@ -23,14 +23,19 @@ public class FirestationsController {
 
     private FirestationsService firestationsService;
 
-    //renvoie la liste de toutes les stations
+    /**
+     * @return renvoie la liste de toutes les stations
+     */
     @GetMapping(value = "/Firestations")
     public ResponseEntity<List<Firestations>> getFirestations() {
         return new ResponseEntity<>(firestationsService.getFirestations(), HttpStatus.OK);
 
     }
 
-    // ajoute une adresse dans la liste
+    /**
+     * @param newFirestation
+     * @return ajoute une adresse dans la liste
+     */
     @PostMapping(value = "/Firestations")
 
     public ResponseEntity<Firestations> addFirestation(@RequestBody Firestations newFirestation) {
@@ -38,7 +43,11 @@ public class FirestationsController {
         return new ResponseEntity<Firestations>(newFirestation, HttpStatus.CREATED);
     }
 
-    // modifier les adresses
+    /**
+     * @param updateFirestation
+     * @param address
+     * @return modifier les adresses
+     */
     @PutMapping(value = "/Firestations/{address}")
     public ResponseEntity<Firestations> updateFirestation(@RequestBody Firestations updateFirestation, @PathVariable String address) {
         Firestations firestationUpdated = firestationsService.updateFirestation(address, updateFirestation);
@@ -49,7 +58,11 @@ public class FirestationsController {
         }
     }
 
-    //supprimer une adresse ou une station
+    /**
+     * @param address
+     * @param station
+     * @return supprimer une adresse ou une station
+     */
     @DeleteMapping(value = "/Firestations/{address}/{station}")
     public ResponseEntity<Firestations> deleteFirestation(@PathVariable String address, @PathVariable Integer station) {
         boolean isDeleted = firestationsService.deleteFirestation(address, station);

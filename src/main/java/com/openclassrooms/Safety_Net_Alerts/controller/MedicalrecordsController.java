@@ -20,12 +20,19 @@ import java.util.List;
 public class MedicalrecordsController {
     private MedicalrecordsService medicalrecordsService;
 
+    /**
+     * @return
+     */
     @GetMapping(value = "/Medicalrecords")
     public ResponseEntity<List<Medicalrecords>> getMedicalrecords() {
         return new ResponseEntity<>(medicalrecordsService.getMedicalrecords(), HttpStatus.OK);
     }
 
-    //cette methode ajoute la personne mais si le nom et prenom sont déjà existe il compare
+    /**
+     * @param newMedicalrecords
+     * @return cette methode ajoute la personne mais si le nom et prenom sont déjà existe il compare
+     */
+
     @PostMapping(value = "/Medicalrecords")
     public ResponseEntity<List<Medicalrecords>> createMedicalrecords(@RequestBody Medicalrecords newMedicalrecords) {
         boolean isCreated = medicalrecordsService.createMedicalrecords(newMedicalrecords);
@@ -36,10 +43,16 @@ public class MedicalrecordsController {
         }
     }
 
-    // cette methode cherche une persoone qui existe dans la liste et modifier la personne
+    /**
+     * @param updateMedicalrecord
+     * @param firstName
+     * @param lastName
+     * @return cette methode cherche une persoone qui existe dans la liste et modifier la personne
+     */
+
     @PutMapping(value = "/Medicalrecords/{firstName}/{lastName}")
     public ResponseEntity<Medicalrecords> updateMedicalrecords
-    (@RequestBody Medicalrecords updateMedicalrecord, @PathVariable String firstName, @PathVariable String lastName) {
+            (@RequestBody Medicalrecords updateMedicalrecord, @PathVariable String firstName, @PathVariable String lastName) {
         Medicalrecords medicalrecordUpdated = medicalrecordsService.updateMedicalrecords(firstName, lastName, updateMedicalrecord);
         if (medicalrecordUpdated != null) {
             return new ResponseEntity<>(medicalrecordUpdated, HttpStatus.OK);
@@ -48,7 +61,11 @@ public class MedicalrecordsController {
         }
     }
 
-    //supprimer les personnes
+    /**
+     * @param firstName
+     * @param lastName
+     * @return supprimer les personnes
+     */
     @DeleteMapping(value = "/Medicalrecords/{firstName}/{lastName}")
     public ResponseEntity<Persons> deleteMedicalrecords(@PathVariable String firstName, @PathVariable String lastName) {
         boolean isDeleted = medicalrecordsService.deleteMedicalrecords(firstName, lastName);

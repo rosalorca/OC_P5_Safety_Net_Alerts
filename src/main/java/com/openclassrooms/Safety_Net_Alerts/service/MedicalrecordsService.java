@@ -12,8 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @Service
 @Slf4j
@@ -22,16 +20,28 @@ public class MedicalrecordsService {
     @Autowired
     private DataStore dataStore;
 
+    /**
+     * @return
+     */
     public List<Medicalrecords> getMedicalrecords() {
         return dataStore.getData().getMedicalrecords();
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @return
+     */
     public Medicalrecords getMedicalrecords(final String firstName, final String lastName) {
         return dataStore.getData().getMedicalrecords().stream()
                 .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
                 .findFirst().orElse(null);
     }
 
+    /**
+     * @param medicalrecord
+     * @return
+     */
     public boolean createMedicalrecords(Medicalrecords medicalrecord) {
         boolean alreadyExists = dataStore.getData().getMedicalrecords()
                 .stream()
@@ -43,6 +53,12 @@ public class MedicalrecordsService {
         }
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @param updateMedicalrecord
+     * @return
+     */
     public Medicalrecords updateMedicalrecords(String firstName, String lastName, Medicalrecords updateMedicalrecord) {
         Optional<Medicalrecords> optionalMedicalrecords = dataStore.getData().getMedicalrecords()
                 .stream()
@@ -60,10 +76,10 @@ public class MedicalrecordsService {
             if (updateMedicalrecord.getBirthdate() != null) {
                 medRec.setBirthdate(updateMedicalrecord.getBirthdate());
             }
-            if (updateMedicalrecord.getMedications() != null){
+            if (updateMedicalrecord.getMedications() != null) {
                 medRec.setMedications(updateMedicalrecord.getMedications());
             }
-            if (updateMedicalrecord.getAllergies() != null){
+            if (updateMedicalrecord.getAllergies() != null) {
                 medRec.setAllergies(updateMedicalrecord.getAllergies());
             }
             log.info("la personne a ètè bien modifié!");
@@ -75,6 +91,11 @@ public class MedicalrecordsService {
         }
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @return
+     */
     public boolean deleteMedicalrecords(String firstName, String lastName) {
         Optional<Medicalrecords> optionalMedicalrecords = dataStore.getData().getMedicalrecords()
                 .stream()
@@ -89,6 +110,12 @@ public class MedicalrecordsService {
             return false;
         }
     }
+
+    /**
+     * @param strBirthdate
+     * @return
+     * @throws ParseException
+     */
     public static int calculateAge(String strBirthdate) throws ParseException {
 
         Date dateBirth = null;
@@ -114,19 +141,5 @@ public class MedicalrecordsService {
         }
 
         return age;
-    }
-    public List<Medicalrecords> getChild(String address) {
-        return dataStore.getData().getMedicalrecords().stream()
-            .filter(person -> {
-                boolean isChild = false;
-                try {
-                    int age = calculateAge(person.getBirthdate());
-                    isChild = age < 18;
-                } catch (final ParseException e) {
-                    log.error("", e);
-                }
-                return false;
-            })
-            .collect(Collectors.toList());
     }
 }

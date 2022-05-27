@@ -34,7 +34,11 @@ public class SafetyNetAlertsController {
     @Autowired
     private MedicalrecordsService medicalrecordsService;
 
-    @GetMapping(value = "/fireStation") // firestation service
+    /**
+     * @param stationNumber
+     * @return retourner une liste persons par rapport au numéro de caserne et compter les enfants et les adults
+     */
+    @GetMapping(value = "/fireStation")
     public PersonsWithNumberOfAdultsAndChildren fireStation(final Integer stationNumber) {
         final PersonsWithNumberOfAdultsAndChildren result = new PersonsWithNumberOfAdultsAndChildren();
         final List<PersonMedicalRecords> pmrs = new ArrayList<>();
@@ -65,6 +69,10 @@ public class SafetyNetAlertsController {
         return result;
     }
 
+    /**
+     * @param address
+     * @return retourner une liste des enfants par rapport à l'adresse
+     */
     @GetMapping(value = "/childAlert")
     public ChildrenListeAndResident childAlert(final String address) {
         final ChildrenListeAndResident result = new ChildrenListeAndResident();
@@ -101,7 +109,10 @@ public class SafetyNetAlertsController {
 
     }
 
-    // récuperer les addresses mails par rapport à la ville
+    /**
+     * @param city
+     * @return récuperer les addresses mails par rapport à la ville
+     */
     @GetMapping(value = "/communityEmail")
     public ResponseEntity<List<String>> communityEmail(final String city) {
         return new ResponseEntity<>(personsService.getPersonsInCity(city).stream()
@@ -109,6 +120,10 @@ public class SafetyNetAlertsController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    /**
+     * @param firestation
+     * @return retourner les numéros de téléphone par rapport à la station
+     */
     @GetMapping(value = "/phoneAlert")
     public List<String> phoneAlert(final Integer firestation) {
         final List<String> addresses = firestationsService.getAddressesCoveredByStation(firestation);
@@ -123,7 +138,11 @@ public class SafetyNetAlertsController {
         }
     }
 
-    @GetMapping(value = "/fire") // personne service
+    /**
+     * @param address
+     * @return retourner une liste persons par rapport à l'adresse
+     */
+    @GetMapping(value = "/fire")
     public FirestationAndPersonsAtAddress fire(final String address) {
         final FirestationAndPersonsAtAddress result = new FirestationAndPersonsAtAddress();
         final List<PersonMedicalRecords> pmrs = new ArrayList<>();
@@ -153,7 +172,12 @@ public class SafetyNetAlertsController {
         return result;
     }
 
-    @GetMapping(value = "/personInfo") // personne service
+    /**
+     * @param firstName
+     * @param lastName
+     * @return retourner une liste persons par rapport au nom et au prénom
+     */
+    @GetMapping(value = "/personInfo")
     public List<PersonMedicalRecords> personInfo(final String firstName, final String lastName) {
         final List<PersonMedicalRecords> result = new ArrayList<>();
         personsService.getPersonInfo(lastName).forEach(person -> {
@@ -176,15 +200,37 @@ public class SafetyNetAlertsController {
         });
         return result;
     }
+
+    /**
+     * @param station
+     * @return retourner une liste persons par rapport à la station
+     */
     @GetMapping(value = "/flood/stations")
-    public FirestationAndPersonsAtAddress floodStations (final Integer station){
+    public FirestationAndPersonsAtAddress floodStation (final Integer station) {
         final FirestationAndPersonsAtAddress result = new FirestationAndPersonsAtAddress();
-        final PersonMedicalRecords pmrs = new PersonMedicalRecords();
-        result.setPersons(Collections.singletonList(pmrs));
+        final List<PersonMedicalRecords> pmrs = new ArrayList<>();
+        result.setPersons(pmrs);
 
+        final List<String> streets = firestationsService.getAddressesCoveredByStation(station);
+        final List<Persons> habitants = personsService.getPersonsAtAddresses(streets);
+        habitants.forEach(p -> {
 
-
-
+            final PersonMedicalRecords pmr = new PersonMedicalRecords();
+            pmr.setFirstName(p.getFirstName());
+            pmr.setLastName(p.getLastName());
+            pmr.setPhone(p.getPhone());
+            final Medicalrecords record = medicalrecordsService.getMedicalrecords(p.getFirstName(), p.getLastName());
+            if (record != null) {
+                pmr.setAllergies(record.getAllergies());
+                pmr.setMedications(record.getMedications());
+                try {
+                    pmr.setAge(MedicalrecordsService.calculateAge(record.getBirthdate()));
+                } catch (final ParseException e) {
+                    log.error("", e);
+                }
+            }
+            pmrs.add(pmr);
+        });
         return result;
     }
 

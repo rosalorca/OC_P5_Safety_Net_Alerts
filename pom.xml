@@ -14,9 +14,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Safety_Net_Alerts_OZLEM</name>
     <description>Safety_Net_Alerts project for Spring Boot</description>
+
     <properties>
         <java.version>11</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

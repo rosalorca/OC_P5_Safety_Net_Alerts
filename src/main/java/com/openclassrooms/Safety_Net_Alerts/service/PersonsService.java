@@ -21,30 +21,49 @@ public class PersonsService {
     @Autowired
     private DataStore dataStore;
 
+    /**
+     * @return
+     */
     public List<Persons> getPersons() {
 
         return dataStore.getData().getPersons();
     }
 
+    /**
+     * @param city
+     * @return
+     */
     public List<Persons> getPersonsInCity(String city) {
         return dataStore.getData().getPersons().stream()
                 .filter(p -> p.getCity().equals(city)).collect(Collectors.toList());
     }
 
+    /**
+     * @param addresses
+     * @return
+     */
     public List<Persons> getPersonsAtAddresses(final List<String> addresses) {
         return dataStore.getData().getPersons().stream()
                 .filter(p -> addresses.contains(p.getAddress()))
                 .collect(Collectors.toList());
     }
 
-    // renvoie la (seule) personne qui a ce nom et ce prénom
+    /**
+     * @return
+     *  renvoie la (seule) personne qui a ce nom et ce prénom
+     */
+
     public Persons getPersonInfo(final String firstName, final String lastName) {
         return dataStore.getData().getPersons().stream()
                 .filter(persons -> persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName))
                 .findFirst().orElse(null);
     }
 
-    // renvoie toutes les personnes qui ont le même nom
+    /**
+     * @param lastName
+     * @return
+     * renvoie toutes les personnes qui ont le même nom
+     */
     public List<Persons> getPersonInfo(final String lastName) {
         return dataStore.getData().getPersons().stream()
                 .filter(persons -> persons.getLastName().equals(lastName))
@@ -52,13 +71,22 @@ public class PersonsService {
     }
 
 
-    // the request for add, update and delete fire stations
+    /**
+     * @param persons
+     * the request for add, update and delete fire stations
+     */
     public void addPersons(Persons persons) {
 
         dataStore.getData().getPersons().add(persons);
         log.info("la personne a ètè bien ajouté!");
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @param updatePerson
+     * @return
+     */
     public Persons updatePersons(String firstName, String lastName, Persons updatePerson) {
         Optional<Persons> optionalPerson = dataStore.getData().getPersons()
                 .stream()
@@ -97,6 +125,11 @@ public class PersonsService {
         }
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @return
+     */
     public boolean deletePersons(String firstName, String lastName) {
         Optional<Persons> optionalPerson = dataStore.getData().getPersons()
                 .stream()

@@ -18,20 +18,33 @@ class PersonsController {
 
     private PersonsService personsService;
 
-    // renvoie la liste de toutes les personnes
+    /**
+     * @return renvoie la liste de toutes les personnes
+     */
+
     @GetMapping(value = "/Persons")
     public ResponseEntity<List<Persons>> getPersons() {
         return new ResponseEntity<>(personsService.getPersons(), HttpStatus.OK);
     }
 
-    // ajoute une personne dans la liste
+    /**
+     * @param newPerson
+     * @return ajoute une personne dans la liste
+     */
+
     @PostMapping(value = "/Persons")
     public ResponseEntity<Persons> addPersons(@RequestBody Persons newPerson) {
         personsService.addPersons(newPerson);
         return new ResponseEntity<Persons>(newPerson, HttpStatus.CREATED);
     }
 
-    // modifier les informations des personnes
+    /**
+     * @param updatePerson
+     * @param firstName
+     * @param lastName
+     * @return modifier les informations des personnes
+     */
+
     @PutMapping(value = "/Persons/{firstName}/{lastName}")
     public ResponseEntity<Persons> updatePersons(@RequestBody Persons updatePerson, @PathVariable String firstName, @PathVariable String lastName) {
         Persons personUpdated = personsService.updatePersons(firstName, lastName, updatePerson);
@@ -42,7 +55,12 @@ class PersonsController {
         }
     }
 
-    //supprimer les personnes
+    /**
+     * @param firstName
+     * @param lastName
+     * @return supprimer les personnes
+     */
+
     @DeleteMapping(value = "/Persons/{firstName}/{lastName}")
     public ResponseEntity<Persons> deletePersons(@PathVariable String firstName, @PathVariable String lastName) {
         boolean isDeleted = personsService.deletePersons(firstName, lastName);

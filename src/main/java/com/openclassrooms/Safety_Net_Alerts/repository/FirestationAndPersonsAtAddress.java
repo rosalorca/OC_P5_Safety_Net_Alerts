@@ -14,6 +14,5 @@ public class FirestationAndPersonsAtAddress {
 
     Integer station;
     List<PersonMedicalRecords> persons;
-    List<PersonMedicalRecords> stations;
 
 }

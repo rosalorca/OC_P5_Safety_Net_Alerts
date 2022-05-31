@@ -206,13 +206,15 @@ public class SafetyNetAlertsController {
      * @return retourner une liste persons par rapport à la station
      */
     @GetMapping(value = "/flood/stations")
-    public FirestationAndPersonsAtAddress floodStation (final Integer station) {
+    public FirestationAndPersonsAtAddress floodAlert (final Integer station) {
         final FirestationAndPersonsAtAddress result = new FirestationAndPersonsAtAddress();
+        result.setStation(station);
         final List<PersonMedicalRecords> pmrs = new ArrayList<>();
         result.setPersons(pmrs);
 
-        final List<String> streets = firestationsService.getAddressesCoveredByStation(station);
-        final List<Persons> habitants = personsService.getPersonsAtAddresses(streets);
+        final List<String> address = firestationsService.getAddressesCoveredByStation(station);
+
+        final List<Persons> habitants = personsService.getPersonsAtAddresses(address);
         habitants.forEach(p -> {
 
             final PersonMedicalRecords pmr = new PersonMedicalRecords();

@@ -49,17 +49,6 @@ public class PersonsService {
     }
 
     /**
-     * @return
-     *  renvoie la (seule) personne qui a ce nom et ce prénom
-     */
-
-    public Persons getPersonInfo(final String firstName, final String lastName) {
-        return dataStore.getData().getPersons().stream()
-                .filter(persons -> persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName))
-                .findFirst().orElse(null);
-    }
-
-    /**
      * @param lastName
      * @return
      * renvoie toutes les personnes qui ont le même nom
@@ -69,7 +58,6 @@ public class PersonsService {
                 .filter(persons -> persons.getLastName().equals(lastName))
                 .collect(Collectors.toList());
     }
-
 
     /**
      * @param persons
@@ -144,6 +132,5 @@ public class PersonsService {
             return false;
         }
     }
-
 
 }

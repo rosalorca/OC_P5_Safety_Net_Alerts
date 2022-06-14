@@ -1,7 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.model;
 
 import lombok.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @NoArgsConstructor
 @AllArgsConstructor

@@ -4,29 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.*;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 
 import java.util.Arrays;
 import java.util.List;
 
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(PersonsController.class)
 class PersonsControllerTest {
     @Autowired
@@ -70,6 +65,7 @@ class PersonsControllerTest {
 
     @Test
     void testUpdatePersonsNotExists() throws Exception {
+        given(personsService.updatePersons(anyString(), anyString(), any())).willReturn(null);
         Persons ozlem = new Persons
                 ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
         ObjectMapper mapper = new ObjectMapper();
@@ -80,8 +76,6 @@ class PersonsControllerTest {
                         .content(json))
                 .andDo(print())
                 .andExpect(status().isNotModified());
-
-
     }
 
     @Test

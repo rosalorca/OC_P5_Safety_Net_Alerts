@@ -37,13 +37,13 @@ public class PersonsServiceTest {
 
     @Test
     void testGetPersonsInCity() throws Exception {
-        Persons john = new Persons("John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512", "jaboyd@email.com");
+      /* Persons john = new Persons("John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512", "jaboyd@email.com");
         List<Persons> allPersons = Arrays.asList(john);
         System.out.println(data);
         System.out.println(dataStore);
         given(dataStore.getData()).willReturn(data);
         given(data.getPersons()).willReturn(allPersons);
 
-        System.out.println(personsService.getPersonsInCity("Culver"));
+        System.out.println(personsService.getPersonsInCity("Culver"));*/
     }
 }

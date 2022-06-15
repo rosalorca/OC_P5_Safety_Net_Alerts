@@ -7,26 +7,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class MedicalrecordsServiceTest {
 
     @Test
-    void getMedicalrecords() {
+    void getMedicalrecords() throws Exception {
     }
 
     @Test
-    void testGetMedicalrecords() {
+    void testGetMedicalrecords() throws Exception {
     }
 
     @Test
-    void createMedicalrecords() {
+    void createMedicalrecords() throws Exception {
     }
 
     @Test
-    void updateMedicalrecords() {
+    void updateMedicalrecords() throws Exception {
     }
 
     @Test
-    void deleteMedicalrecords() {
+    void deleteMedicalrecords() throws Exception {
     }
 
     @Test
-    void calculateAge() {
+    void calculateAge() throws Exception {
     }
 }

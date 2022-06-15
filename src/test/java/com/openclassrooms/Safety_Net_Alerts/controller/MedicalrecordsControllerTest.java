@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,7 +47,7 @@ class MedicalrecordsControllerTest {
     }
 
     @Test
-    void testCreateMedicalrecordsPersonNonExist() throws Exception {
+    void testCreateMedicalrecordsPersonNotExist() throws Exception {
         Medicalrecords ozlem = new Medicalrecords(
                 "Özlem", "Dönder", "24/02/1988",
                 Collections.singletonList("dolipran:500mg"), Collections.singletonList("pollen"));
@@ -59,17 +60,14 @@ class MedicalrecordsControllerTest {
                         .content(json))
                 .andDo(print())
                 .andExpect(status().isCreated())
-              /*  .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Özlem"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Dönder"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.birthdate").value("24/02/1988"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].allergies").value("pollen"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].medications").value("dolipran:500mg"))*/
+
                 .andReturn();
 
 
     }
+
     @Test
-    void testCreateMedicalrecordsPersonExist() throws Exception{
+    void testCreateMedicalrecordsPersonExist() throws Exception {
         given(medicalrecordsService.createMedicalrecords(any())).willReturn(false);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(null);
@@ -80,15 +78,58 @@ class MedicalrecordsControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn();
+    }
+
+
+    @Test
+    void testUpdateMedicalrecordsPersonExist() throws Exception {
+        Medicalrecords update = Medicalrecords.builder()
+                .medications(Collections.singletonList("thradox:700mg")).allergies(Collections.singletonList("illisoxian")).build();
+        given(medicalrecordsService.updateMedicalrecords(anyString(), anyString(), any())).willReturn(update);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(update);
+        mockMvc.perform(put("/Medicalrecords/Reginold/Walker")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.medications").value("thradox:700mg"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.allergies").value("illisoxian"));
+
+
+    }
+
+    @Test
+    void testUpdateMedicalrecordsPersonNotExist() throws Exception {
+        given(medicalrecordsService.updateMedicalrecords(anyString(), anyString(), any())).willReturn(null);
+        Medicalrecords ozlem = new Medicalrecords(
+                "Ozlem", "Donder", "24/02/1988",
+                Collections.singletonList("dolipran:500"), Collections.singletonList("pollen"));
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(ozlem);
+        mockMvc.perform(put("/Medicalrecords/Ozlem/Donder")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isNotModified())
+                .andReturn();
 
     }
 
 
     @Test
-    void testUpdateMedicalrecords() throws Exception {
+    void testDeleteMedicalrecordsPersonExist() throws Exception {
+        given(medicalrecordsService.deleteMedicalrecords(anyString(),anyString())).willReturn(true);
+        mockMvc.perform(delete("/Medicalrecords/Reginold/Walker"))
+                .andExpect(status().isGone());
     }
 
     @Test
-    void testDeleteMedicalrecords() throws Exception {
+    void testDeleteMedicalrecordsPersonNotExist() throws Exception {
+        given(medicalrecordsService.deleteMedicalrecords(anyString(),anyString())).willReturn(false);
+        mockMvc.perform(delete("/Medicalrecords/Ozlem/Donder"))
+                .andExpect(status().isNotModified());
     }
 }

@@ -7,30 +7,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class FirestationsServiceTest {
 
     @Test
-    void getFirestations() {
+    void getFirestations() throws Exception {
     }
 
     @Test
-    void getAddressesCoveredByStation() {
+    void getAddressesCoveredByStation() throws Exception {
     }
 
     @Test
-    void getStationCoveredByAddress() {
+    void getStationCoveredByAddress() throws Exception {
     }
 
     @Test
-    void getStation() {
+    void getStation() throws Exception {
     }
 
     @Test
-    void addFirestation() {
+    void addFirestation() throws Exception {
     }
 
     @Test
-    void updateFirestation() {
+    void updateFirestation() throws Exception {
     }
 
     @Test
-    void deleteFirestation() {
+    void deleteFirestation() throws Exception {
     }
 }

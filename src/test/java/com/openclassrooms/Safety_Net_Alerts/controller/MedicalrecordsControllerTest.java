@@ -88,7 +88,7 @@ class MedicalrecordsControllerTest {
         given(medicalrecordsService.updateMedicalrecords(anyString(), anyString(), any())).willReturn(update);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(update);
-        mockMvc.perform(put("/Medicalrecords/Reginold/Walker")
+        mockMvc.perform(put("/Medicalrecords/Reginold;/Walker")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(json))

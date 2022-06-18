@@ -17,6 +17,10 @@ public class FirestationsService {
     @Autowired
     private DataStore dataStore;
 
+    public void setDataStore(final DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+
     public List<Firestations> getFirestations() {
 
         return dataStore.getData().getFirestations();
@@ -46,13 +50,6 @@ public class FirestationsService {
                 .map(Firestations::getStation).findAny().get();
     }
 
-    public List<Firestations> getStation(final List<Integer> station) {
-        return dataStore.getData().getFirestations().stream()
-                .filter(f -> f.getStation().equals(station))
-                .collect(Collectors.toList());
-
-    }
-
     /**
      * @param firestations the request for add, update and delete fire stations
      */
@@ -63,7 +60,6 @@ public class FirestationsService {
     }
 
     /**
-     *
      * @param address
      * @param updateFirestation
      * @return
@@ -98,7 +94,5 @@ public class FirestationsService {
             return false;
         }
     }
-
-
 
 }

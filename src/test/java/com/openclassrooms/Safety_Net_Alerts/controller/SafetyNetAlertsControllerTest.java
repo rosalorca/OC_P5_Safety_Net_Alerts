@@ -3,6 +3,7 @@ package com.openclassrooms.Safety_Net_Alerts.controller;
 import com.openclassrooms.Safety_Net_Alerts.model.Firestations;
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
+import com.openclassrooms.Safety_Net_Alerts.repository.PersonMedicalRecords;
 import com.openclassrooms.Safety_Net_Alerts.repository.PersonsWithNumberOfAdultsAndChildren;
 import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
 import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
@@ -71,10 +72,57 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void childAlert() throws Exception {
+       List<Persons> listPersons = new ArrayList<>();
+        Persons lily = new Persons
+                ("Lily", "Cooper", "26 Bosphore St", "Paris", 34075, "841-874-9845", "lily@email.com");
+        listPersons.add(lily);
+        Persons ozlem = new Persons
+                ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
+        listPersons.add(ozlem);
+        given(personsService.getPersonsAtAddresses(anyList())).willReturn(listPersons);
+        Medicalrecords mrOzlem = new Medicalrecords("Ozlem", "Donder", "24/02/1988", null, null);
+        given(medicalrecordsService.getMedicalrecords(eq("Ozlem"), eq("Donder"))).willReturn(mrOzlem);
+        Medicalrecords mrLily = new Medicalrecords("Lily", "Cooper", "21/08/2015", null, null);
+        given(medicalrecordsService.getMedicalrecords(eq("Lily"), eq("Cooper"))).willReturn(mrLily);
+
+        mockMvc.perform(get("/childAlert?address=26%20Bosphore%20St")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.childListe.length()").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.childListe[0].firstName").value("Lily"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.residentListe.length()").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.residentListe[0].firstName").value("Ozlem"));
+    }
+    @Test
+    void childAlertNotExistChild() throws Exception{
+        List<Persons> listPersons = new ArrayList<>();
+        Persons ozlem = new Persons
+                ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
+        listPersons.add(ozlem);
+        given(personsService.getPersonsAtAddresses(anyList())).willReturn(listPersons);
+        Medicalrecords mrOzlem = new Medicalrecords("Ozlem", "Donder", "24/02/1988", null, null);
+        given(medicalrecordsService.getMedicalrecords(eq("Ozlem"), eq("Donder"))).willReturn(mrOzlem);
+        mockMvc.perform(get("/childAlert?address=26%20Bosphore%20St")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
     }
 
     @Test
     void communityEmail() throws Exception {
+
+
+
+        mockMvc.perform(get("/phoneAlert?firestation="+1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
     }
 
     @Test

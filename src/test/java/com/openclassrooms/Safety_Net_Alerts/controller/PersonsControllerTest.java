@@ -62,22 +62,6 @@ class PersonsControllerTest {
 
     }
 
-
-    @Test
-    void testUpdatePersonsNotExists() throws Exception {
-        given(personsService.updatePersons(anyString(), anyString(), any())).willReturn(null);
-        Persons ozlem = new Persons
-                ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(ozlem);
-        mockMvc.perform(put("/Persons/Ozlem/Donder")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andDo(print())
-                .andExpect(status().isNotModified());
-    }
-
     @Test
     void testUpdatePersonsExists() throws Exception {
         Persons lily = new Persons
@@ -96,6 +80,20 @@ class PersonsControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Cooper"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phone").value("841-874-9845"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("lily@email.com"));
+    }
+    @Test
+    void testUpdatePersonsNotExists() throws Exception {
+        given(personsService.updatePersons(anyString(), anyString(), any())).willReturn(null);
+        Persons ozlem = new Persons
+                ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(ozlem);
+        mockMvc.perform(put("/Persons/Ozlem/Donder")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isNotModified());
     }
 
     @Test

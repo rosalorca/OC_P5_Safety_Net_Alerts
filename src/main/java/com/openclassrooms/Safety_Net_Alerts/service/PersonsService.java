@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,11 +19,14 @@ public class PersonsService {
     @Autowired
     private DataStore dataStore;
 
+    public void setDataStore(final DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+
     /**
      * @return
      */
     public List<Persons> getPersons() {
-
         return dataStore.getData().getPersons();
     }
 

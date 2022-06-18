@@ -1,7 +1,5 @@
 package com.openclassrooms.Safety_Net_Alerts;
 
-
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

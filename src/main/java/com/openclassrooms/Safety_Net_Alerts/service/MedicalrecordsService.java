@@ -20,10 +20,15 @@ public class MedicalrecordsService {
     @Autowired
     private DataStore dataStore;
 
+    public void setDataStore(DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+
     /**
      * @return
      */
     public List<Medicalrecords> getMedicalrecords() {
+
         return dataStore.getData().getMedicalrecords();
     }
 
@@ -142,4 +147,5 @@ public class MedicalrecordsService {
 
         return age;
     }
+
 }

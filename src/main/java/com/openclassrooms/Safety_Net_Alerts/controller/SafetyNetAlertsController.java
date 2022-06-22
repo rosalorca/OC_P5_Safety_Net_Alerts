@@ -9,7 +9,6 @@ import com.openclassrooms.Safety_Net_Alerts.repository.PersonsWithNumberOfAdults
 import com.openclassrooms.Safety_Net_Alerts.service.FirestationsService;
 import com.openclassrooms.Safety_Net_Alerts.service.MedicalrecordsService;
 import com.openclassrooms.Safety_Net_Alerts.service.PersonsService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,18 +107,6 @@ public class SafetyNetAlertsController {
         }
 
     }
-
-    /**
-     * @param city
-     * @return récuperer les addresses mails par rapport à la ville
-     */
-    @GetMapping(value = "/communityEmail")
-    public ResponseEntity<List<String>> communityEmail(final String city) {
-        return new ResponseEntity<>(personsService.getPersonsInCity(city).stream()
-                .map(Persons::getEmail)
-                .collect(Collectors.toList()), HttpStatus.OK);
-    }
-
     /**
      * @param firestation
      * @return retourner les numéros de téléphone par rapport à la station
@@ -171,36 +158,6 @@ public class SafetyNetAlertsController {
         });
         return result;
     }
-
-    /**
-     * @param firstName
-     * @param lastName
-     * @return retourner une liste persons par rapport au nom et au prénom
-     */
-    @GetMapping(value = "/personInfo")
-    public List<PersonMedicalRecords> personInfo(final String firstName, final String lastName) {
-        final List<PersonMedicalRecords> result = new ArrayList<>();
-        personsService.getPersonInfo(lastName).forEach(person -> {
-            final PersonMedicalRecords pmr = new PersonMedicalRecords();
-            pmr.setFirstName(person.getFirstName());
-            pmr.setLastName(person.getLastName());
-            pmr.setAddress(person.getAddress());
-            pmr.setEmail(person.getEmail());
-            final Medicalrecords record = medicalrecordsService.getMedicalrecords(person.getFirstName(), person.getLastName());
-            if (record != null) {
-                pmr.setAllergies(record.getAllergies());
-                pmr.setMedications(record.getMedications());
-                try {
-                    pmr.setAge(MedicalrecordsService.calculateAge(record.getBirthdate()));
-                } catch (final ParseException e) {
-                    log.error("", e);
-                }
-            }
-            result.add(pmr);
-        });
-        return result;
-    }
-
     /**
      * @param station
      * @return retourner une liste persons par rapport à la station
@@ -234,6 +191,45 @@ public class SafetyNetAlertsController {
             pmrs.add(pmr);
         });
         return result;
+    }
+    /**
+     * @param firstName
+     * @param lastName
+     * @return retourner une liste persons par rapport au nom et au prénom
+     */
+    @GetMapping(value = "/personInfo")
+    public List<PersonMedicalRecords> personInfo(final String firstName, final String lastName) {
+        final List<PersonMedicalRecords> result = new ArrayList<>();
+        personsService.getPersonInfo(lastName).forEach(person -> {
+            final PersonMedicalRecords pmr = new PersonMedicalRecords();
+            pmr.setFirstName(person.getFirstName());
+            pmr.setLastName(person.getLastName());
+            pmr.setAddress(person.getAddress());
+            pmr.setEmail(person.getEmail());
+            final Medicalrecords record = medicalrecordsService.getMedicalrecords(person.getFirstName(), person.getLastName());
+            if (record != null) {
+                pmr.setAllergies(record.getAllergies());
+                pmr.setMedications(record.getMedications());
+                try {
+                    pmr.setAge(MedicalrecordsService.calculateAge(record.getBirthdate()));
+                } catch (final ParseException e) {
+                    log.error("", e);
+                }
+            }
+            result.add(pmr);
+        });
+        return result;
+    }
+
+    /**
+     * @param city
+     * @return récuperer les addresses mails par rapport à la ville
+     */
+    @GetMapping(value = "/communityEmail")
+    public ResponseEntity<List<String>> communityEmail(final String city) {
+        return new ResponseEntity<>(personsService.getPersonsInCity(city).stream()
+                .map(Persons::getEmail)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
 }

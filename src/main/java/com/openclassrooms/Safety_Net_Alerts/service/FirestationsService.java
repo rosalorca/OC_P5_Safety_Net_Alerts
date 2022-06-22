@@ -56,7 +56,7 @@ public class FirestationsService {
 
     public void addFirestation(Firestations firestations) {
         dataStore.getData().getFirestations().add(firestations);
-        log.info("la station a ètè bien ajouté!");
+        log.info("la station a ètè bien ajoutée!");
     }
 
     /**
@@ -70,6 +70,7 @@ public class FirestationsService {
         for (Firestations firestations1 : firestations) {
             if (firestations1.getAddress().equals(address)) {
                 firestations1.setStation(updateFirestation.getStation());
+                firestations1.setAddress(updateFirestation.getAddress());
                 fireStationUpdated = firestations1;
             }
         }
@@ -86,11 +87,11 @@ public class FirestationsService {
                 .stream()
                 .filter(fs -> fs.getStation().equals(station) && fs.getAddress().equals(address)).findFirst();
         if (optionalFirestation.isPresent()) {
-            System.out.println("j'ai trouvé la station ou l'adresse a supprimer !");
-            dataStore.getData().getPersons().remove(optionalFirestation.get());
+            System.out.println("j'ai trouvé la station ou l'adresse à supprimer !");
+            dataStore.getData().getFirestations().remove(optionalFirestation.get());
             return true;
         } else {
-            log.error("je n'ai pas trouvé la station ou l'adresse a supprimer !");
+            log.error("je n'ai pas trouvé la station ou l'adresse à supprimer !");
             return false;
         }
     }

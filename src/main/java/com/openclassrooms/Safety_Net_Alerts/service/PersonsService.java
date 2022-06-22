@@ -2,7 +2,6 @@ package com.openclassrooms.Safety_Net_Alerts.service;
 
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.model.Persons;
-import com.openclassrooms.Safety_Net_Alerts.repository.PersonMedicalRecords;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,11 +104,11 @@ public class PersonsService {
             if (updatePerson.getZip() != 0) {
                 person.setZip(updatePerson.getZip());
             }
-            log.info("la personne a ètè bien modifié!");
+            log.info("la personne a ètè bien modifiée !");
             return person;
 
         } else {
-            log.error("je n'ai pas trouvé la personne a modifier !");
+            log.error("je n'ai pas trouvé la personne à modifier !");
             return null;
         }
     }
@@ -125,11 +124,11 @@ public class PersonsService {
                 .filter(person -> person.getFirstName().equals(firstName) && person.getLastName().equals(lastName))
                 .findFirst();
         if (optionalPerson.isPresent()) {
-            System.out.println("j'ai trouvé la personne a supprimer !");
+            System.out.println("j'ai trouvé la personne à supprimer !");
             dataStore.getData().getPersons().remove(optionalPerson.get());
             return true;
         } else {
-            log.error("je n'ai pas trouvé la personne a supprimer !");
+            log.error("je n'ai pas trouvé la personne à supprimer !");
             return false;
         }
     }

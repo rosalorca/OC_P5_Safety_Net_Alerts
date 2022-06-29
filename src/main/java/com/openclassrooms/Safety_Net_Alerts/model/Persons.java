@@ -7,7 +7,6 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-@Data
 public class Persons {
 
     private String firstName;

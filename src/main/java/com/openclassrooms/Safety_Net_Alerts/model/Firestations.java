@@ -7,13 +7,10 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-
-
-public class  Firestations {
+public class Firestations {
 
     private Integer station;
     private String address;
-
 
 
 }

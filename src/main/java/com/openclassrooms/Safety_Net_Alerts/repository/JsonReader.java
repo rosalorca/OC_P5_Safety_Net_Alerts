@@ -26,7 +26,6 @@ public class JsonReader {
         log.info("Loading JSON file");
         InputStream resource = new ClassPathResource("data.json").getInputStream();
         WorkData datas = objectMapper.readValue(resource, WorkData.class);
-        //System.out.println(datas);
         dataStore.setData(datas);
     }
 }

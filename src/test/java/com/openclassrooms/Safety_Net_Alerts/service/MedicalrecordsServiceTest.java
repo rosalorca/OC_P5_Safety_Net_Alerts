@@ -1,7 +1,6 @@
 package com.openclassrooms.Safety_Net_Alerts.service;
 
 import com.openclassrooms.Safety_Net_Alerts.model.Medicalrecords;
-import com.openclassrooms.Safety_Net_Alerts.model.Persons;
 import com.openclassrooms.Safety_Net_Alerts.repository.DataStore;
 import com.openclassrooms.Safety_Net_Alerts.repository.WorkData;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 class MedicalrecordsServiceTest {
@@ -33,6 +32,23 @@ class MedicalrecordsServiceTest {
         medicalrecordsService.setDataStore(dataStore);
         data = Mockito.mock(WorkData.class);
         given(dataStore.getData()).willReturn(data);
+
+    }
+    @Test
+    void testGetAllMedicalrecords() throws Exception {
+        List<Medicalrecords> allMR = new ArrayList<>();
+        Medicalrecords mr1 = new Medicalrecords
+                ("John", "Boyd", "03/06/1984", Collections.singletonList("aznol:350mg"), Collections.singletonList("nillacilan"));
+        allMR.add(mr1);
+        Medicalrecords mr2 = new Medicalrecords
+                ("Ozlem", "Donder", "24/02/1984", Collections.singletonList("aznol:100mg"), Collections.singletonList("pollen"));
+        allMR.add(mr2);
+        given(data.getMedicalrecords()).willReturn(allMR);
+      List<Medicalrecords> result = medicalrecordsService.getMedicalrecords();
+      assertEquals("John", result.get(0).getFirstName());
+      assertEquals("Ozlem", result.get(1).getFirstName());
+
+
     }
 
     @Test
@@ -40,8 +56,6 @@ class MedicalrecordsServiceTest {
 
         Medicalrecords mr1 = new Medicalrecords
                 ("John", "Boyd", "03/06/1984", Collections.singletonList("aznol:350mg"), Collections.singletonList("nillacilan"));
-       // Medicalrecords mr2 = new Medicalrecords
-           //     ("Ozlem", "Donder", "24/02/1984", null, Collections.singletonList(null));
         List<Medicalrecords> allMR = Arrays.asList(mr1);
         given(data.getMedicalrecords()).willReturn(allMR);
         Medicalrecords result1 = medicalrecordsService.getMedicalrecords(mr1.getFirstName(), mr1.getLastName());
@@ -54,12 +68,18 @@ class MedicalrecordsServiceTest {
 
     @Test
     void createMedicalrecords() throws Exception {
-        Medicalrecords mr = new Medicalrecords("John", "Boyd", "03/06/1984", Collections.singletonList("aznol:350mg"), Collections.singletonList("nillacilan"));
-        List<Medicalrecords> allMR = Arrays.asList(mr);
+        Medicalrecords mr = new Medicalrecords
+                ("John", "Boyd", "03/06/1984", Collections.singletonList("aznol:350mg"), Collections.singletonList("nillacilan"));
+        List<Medicalrecords> allMR = new java.util.ArrayList<>();
+        allMR.add(mr);
         given(data.getMedicalrecords()).willReturn(allMR);
         medicalrecordsService.createMedicalrecords(mr);
-        assertEquals(1, allMR.size());
-        assertTrue(allMR.contains(mr));
+        Medicalrecords mr1 = new Medicalrecords
+                ("Ozlem", "Donder", "24/02/1984", Collections.singletonList("aznol:100mg"), Collections.singletonList("pollen"));
+        medicalrecordsService.createMedicalrecords(mr1);
+        assertEquals(2, allMR.size());
+        assertTrue(allMR.contains(mr1));
+
     }
 
     @Test

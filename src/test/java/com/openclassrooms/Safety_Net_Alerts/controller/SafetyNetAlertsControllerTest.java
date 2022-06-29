@@ -13,17 +13,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -98,19 +94,19 @@ class SafetyNetAlertsControllerTest {
     @Test
     void childAlertNotExistChild() throws Exception {
         List<Persons> listPersons = new ArrayList<>();
-            Persons ozlem = new Persons
-                    ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
-            listPersons.add(ozlem);
-            given(personsService.getPersonsAtAddresses(anyList())).willReturn(listPersons);
-            Medicalrecords mrOzlem = new Medicalrecords("Ozlem", "Donder", "24/02/1988", null, null);
-            given(medicalrecordsService.getMedicalrecords(eq("Ozlem"), eq("Donder"))).willReturn(mrOzlem);
-            mockMvc.perform(get("/childAlert?address=26%20Bosphore%20St")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
-        }
+        Persons ozlem = new Persons
+                ("Ozlem", "Donder", "26 Bosphore St", "Paris", 34075, "123-456-7890", "ozlem-paris@email.com");
+        listPersons.add(ozlem);
+        given(personsService.getPersonsAtAddresses(anyList())).willReturn(listPersons);
+        Medicalrecords mrOzlem = new Medicalrecords("Ozlem", "Donder", "24/02/1988", null, null);
+        given(medicalrecordsService.getMedicalrecords(eq("Ozlem"), eq("Donder"))).willReturn(mrOzlem);
+        mockMvc.perform(get("/childAlert?address=26%20Bosphore%20St")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
+    }
 
     @Test
     void phoneAlert() throws Exception {
@@ -127,17 +123,19 @@ class SafetyNetAlertsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0]").value("841-874-9845"));
     }
-        @Test
-        void phoneAlertNotExistStation() throws Exception {
-            given(firestationsService.getFirestations()).willReturn(null);
-            Firestations fireStation = new Firestations(5, "1871 Özlem St");
-            mockMvc.perform(get("/phoneAlert?stationNumber=" + 5)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
-        }
+
+    @Test
+    void phoneAlertNotExistStation() throws Exception {
+        given(firestationsService.getFirestations()).willReturn(null);
+        Firestations fireStation = new Firestations(5, "1871 Özlem St");
+        mockMvc.perform(get("/phoneAlert?stationNumber=" + 5)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
+    }
+
     @Test
     void fire() throws Exception {
         given(firestationsService.getAddressesCoveredByStation(anyInt())).willReturn(List.of("489 Manchester St"));
@@ -169,7 +167,7 @@ class SafetyNetAlertsControllerTest {
         Medicalrecords mrEric = new Medicalrecords("Eric", "Cadigan", "08/06/1945",
                 Collections.singletonList("tradoxidine:400mg"), Collections.singletonList(""));
         given(medicalrecordsService.getMedicalrecords(eq("Eric"), eq("Cadigan"))).willReturn(mrEric);
-        mockMvc.perform(get("/flood/stations?station=" +2)
+        mockMvc.perform(get("/flood/stations?station=" + 2)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -178,9 +176,10 @@ class SafetyNetAlertsControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$..lastName").value("Cadigan"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$..age").value(77));
     }
+
     @Test
     void personInfo() throws Exception {
-       List<Persons> listPersons = new ArrayList<>();
+        List<Persons> listPersons = new ArrayList<>();
         Persons brian = new Persons
                 ("Brian", "Stelzer", "947 E. Rose Dr", "Culver", 97451, "841-874-7458", "gramps@email.com");
         listPersons.add(brian);
@@ -226,6 +225,7 @@ class SafetyNetAlertsControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1]").value("jaboy@email.com"));
 
     }
+
     @Test
     void communityEmailNotExistCity() throws Exception {
         given(personsService.getPersonsInCity(anyString())).willReturn(new ArrayList<>());
